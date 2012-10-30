@@ -1,44 +1,51 @@
 function Car ()
 {
 	var self=this;
-	self.position=new Vector(200, 200);
-	self.angle=0;
-	self.speed=2;
 
 	self.start = function()
 	{
-		console.log('car started');
+		self.position=new Vector(200, 200);
+		self.angle=0;
+		self.speed=2;
+		self.steering = 0;
+		self.acceleration = 0;
+		console.log('New car at ', self.position.x, self.position.y)
 	}
 
 	self.accelerate = function ()
 	{
-		self.speed += 1;
-		console.log('car accelerate');
+		self.acceleration = 1;
 	} 
 
 	self.decelerate = function () 
 	{
-		if (self.speed > 0)
-		{
-			self.speed -= 1;
-			console.log('car braking');
-		}
+		self.acceleration = -1;
+	}
+
+	self.stopAccelerate = function()
+	{
+		self.acceleration = 0;
 	}
 
 	self.turnLeft = function()
 	{
-		self.angle -= 0.1;
+		self.steering = -1;
 	}
 
 	self.turnRight = function()
 	{
-		self.angle += 0.1;
+		self.steering = 1;
+	}
+
+	self.stopTurn = function()
+	{
+		self.steering = 0;
 	}
 
 	self.draw = function(context)
 	{
 		context.save();
-		context.translate(this.position.x, this.position.y);
+		context.translate(self.position.x, self.position.y);
 		context.rotate(self.angle);
 		context.lineWidth=5;
 		context.beginPath();
@@ -49,16 +56,20 @@ function Car ()
 
 	self.update = function ()
 	{
-		this.position.x += this.speed * Math.cos(this.angle);
-		this.position.y += this.speed * Math.sin(this.angle);
+		// console.log("update: ", self.acceleration, self.angle, self.steering);
+		self.speed += self.acceleration;
+		self.angle += self.steering * 0.1;
+		self.position.x += self.speed * Math.cos(self.angle);
+		self.position.y += self.speed * Math.sin(self.angle);
+		self.speed *= 0.96;
 	}
 }
 
 function Vector(x, y)
 {
 	var self=this;
-	this.x=x;
-	this.y=y;
+	self.x=x;
+	self.y=y;
 }
 
 function Game()
@@ -73,12 +84,13 @@ function Game()
 	    self.car = new Car();
 	    self.car.start();
 	    $('body').keydown(self.keydown);
-	    $('body').keydown(self.keyup);
+	    $('body').keyup(self.keyup);
 	    self.gameloop();
 	}
 
 	self.keydown=function(event)
 	{
+		console.log('key ' + event.keyCode);
 		switch(event.keyCode)
 		{
 			case 37: //left
@@ -98,7 +110,18 @@ function Game()
 
 	self.keyup=function(event)
 	{
-		console.log('Keyup: ' + event.keyCode);
+		console.log("keyup " + event.keyCode);
+		switch(event.keyCode)
+		{
+			case 37: //left
+			case 39: //right
+				self.car.stopTurn();
+				break;
+			case 38: //up
+			case 40: //down
+				self.car.stopAccelerate();
+				break;
+		}
 	}
 
 	self.gameloop=function()
