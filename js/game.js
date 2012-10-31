@@ -1,77 +1,3 @@
-function Car ()
-{
-	var self=this;
-
-	self.start = function()
-	{
-		self.position=new Vector(200, 200);
-		self.angle=0;
-		self.speed=2;
-		self.steering = 0;
-		self.acceleration = 0;
-		console.log('New car at ', self.position.x, self.position.y)
-	}
-
-	self.accelerate = function ()
-	{
-		self.acceleration = 1;
-	} 
-
-	self.decelerate = function () 
-	{
-		self.acceleration = -1;
-	}
-
-	self.stopAccelerate = function()
-	{
-		self.acceleration = 0;
-	}
-
-	self.turnLeft = function()
-	{
-		self.steering = -1;
-	}
-
-	self.turnRight = function()
-	{
-		self.steering = 1;
-	}
-
-	self.stopTurn = function()
-	{
-		self.steering = 0;
-	}
-
-	self.draw = function(context)
-	{
-		context.save();
-		context.translate(self.position.x, self.position.y);
-		context.rotate(self.angle);
-		context.lineWidth=5;
-		context.beginPath();
-		context.rect(-10, -5, 10, 5);
-		context.stroke();
-		context.restore();
-	}
-
-	self.update = function ()
-	{
-		// console.log("update: ", self.acceleration, self.angle, self.steering);
-		self.speed += self.acceleration;
-		self.angle += self.steering * 0.1;
-		self.position.x += self.speed * Math.cos(self.angle);
-		self.position.y += self.speed * Math.sin(self.angle);
-		self.speed *= 0.96;
-	}
-}
-
-function Vector(x, y)
-{
-	var self=this;
-	self.x=x;
-	self.y=y;
-}
-
 function Game()
 {
 	var self=this;
@@ -79,14 +5,41 @@ function Game()
 
 	self.init=function()
 	{
-	    plane = $("#plane").get(0);
-	    self.context=plane.getContext('2d');
+	    self.plane = $("#plane").get(0);
+	    self.context=self.plane.getContext('2d');
+		self.track = new Image();
+		self.track.onload=self.begin;
+ 		self.track.src = "img/track.png";
+	}
+
+	self.begin=function()
+	{
+	    self.plane.width = self.track.width;
+	    self.plane.height = self.track.height;
+	    self.context.drawImage(self.track, 0, 0);
+	    self.resize();
+
+ 		var data=self.context.getImageData(0, 0, self.track.width, self.track.height).data;
 	    self.car = new Car();
 	    self.car.start();
 	    $('body').keydown(self.keydown);
 	    $('body').keyup(self.keyup);
 	    self.gameloop();
 	}
+
+    self.resize=function() {
+        var scale = {x: 1, y: 1};
+        scale.x = (window.innerWidth) / this.plane.width;
+        scale.y = (window.innerHeight) / this.plane.height;
+        
+		if (scale.x < scale.y) {
+            scale = scale.x + ', ' + scale.x;
+        } else {
+            scale = scale.y + ', ' + scale.y;
+        }
+
+        this.plane.setAttribute('style', '-ms-transform-origin: center top; -webkit-transform-origin: center top; -moz-transform-origin: center top; -o-transform-origin: center top; transform-origin: center top; -ms-transform: scale(' + scale + '); -webkit-transform: scale3d(' + scale + ', 1); -moz-transform: scale(' + scale + '); -o-transform: scale(' + scale + '); transform: scale(' + scale + ');');
+    }
 
 	self.keydown=function(event)
 	{
@@ -134,16 +87,13 @@ function Game()
 
 	self.clear = function()
 	{
-		self.context.fillStyle='#999999';
-		self.context.clearRect(0, 0, plane.width, plane.height);
-		self.context.beginPath();
-		self.context.rect(0, 0, plane.width, plane.height);
-		self.context.closePath();
-		self.context.fill();
+		self.context.clearRect(0, 0, self.plane.width, self.plane.height);
+		self.context.drawImage(self.track, 0, 0);
 	}
 
 	self.draw=function()
 	{
+		console.log('dimensions: ', self.track.width, self.track.height)
 		self.car.draw(self.context);
 	}
 

@@ -4,7 +4,7 @@ requirejs.config({
 });
 
 // Start the main app logic.
-requirejs(['jquery', 'game'],
+requirejs(['jquery', 'car', 'game'],
 function   ($) {
     new Game().init();
 });
