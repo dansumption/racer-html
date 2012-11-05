@@ -1,25 +1,15 @@
 function Game()
 {
 	var self=this,
-		track = new Image(),
-		trackData,
-		car;
+		track = new Track("img/track.png"),
+		car = new Car();
+	track.init();
 
-	self.init = function()
-	{
-		track.onload=begin;
-		track.src = "img/track.png";
-	}
-
-	var begin=function()
+	self.begin=function()
 	{
 	    plane.width = track.width;
 	    plane.height = track.height;
-	    context.drawImage(track, 0, 0);
 	    resize();
-
- 		trackData = context.getImageData(0, 0, track.width, track.height).data;
-	    car = new Car();
 	    $('body').keydown(keydown);
 	    $('body').keyup(keyup);
 	    gameloop();
@@ -92,7 +82,7 @@ function Game()
 	var clear = function()
 	{
 		context.clearRect(0, 0, plane.width, plane.height);
-		context.drawImage(track, 0, 0);
+		track.draw();
 	}
 
 	var draw=function()

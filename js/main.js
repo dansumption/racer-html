@@ -4,10 +4,10 @@ requirejs.config({
 });
 
 // Start the main app logic.
-requirejs(['jquery', 'car', 'game'],
+requirejs(['jquery', 'car', 'track', 'game'],
 function   ($)
 {
     plane = $("#plane").get(0),
     context = plane.getContext('2d');
-    new Game().init();
+    game = new Game();
 });
