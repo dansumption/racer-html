@@ -96,6 +96,8 @@ function Game()
 	var update=function()
 	{
 		car.update();
+		var pixelData = track.pixelAt(Math.round(car.x), Math.round(car.y));
+		console.log('pixel: ' + pixelData); // .toString(16));
 		// var offset = Math.round(car.x) * 4 + Math.round(car.y) * 4 * track.width;
 		// console.log('seeking ' + offset + ' from ' + trackData.length);
         // console.log("pixel is " + trackData[offset]+','+trackData[offset + 1]+','+trackData[offset + 2]+','+trackData[offset + 3]);
