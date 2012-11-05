@@ -1,36 +1,37 @@
 function Game()
 {
-	var self=this;
+	var self=this,
+    	plane = $("#plane").get(0),
+    	context=plane.getContext('2d'),
+		track = new Image(),
+		trackData,
+		car;
 
-
-	self.init=function()
+	self.init = function()
 	{
-	    self.plane = $("#plane").get(0);
-	    self.context=self.plane.getContext('2d');
-		self.track = new Image();
-		self.track.onload=self.begin;
- 		self.track.src = "img/track.png";
+		track.onload=begin;
+		track.src = "img/track.png";
 	}
 
-	self.begin=function()
+	var begin=function()
 	{
-	    self.plane.width = self.track.width;
-	    self.plane.height = self.track.height;
-	    self.context.drawImage(self.track, 0, 0);
-	    self.resize();
+	    plane.width = track.width;
+	    plane.height = track.height;
+	    context.drawImage(track, 0, 0);
+	    resize();
 
- 		self.trackData=self.context.getImageData(0, 0, self.track.width, self.track.height).data;
-	    self.car = new Car();
-	    $('body').keydown(self.keydown);
-	    $('body').keyup(self.keyup);
-	    self.gameloop();
+ 		trackData = context.getImageData(0, 0, track.width, track.height).data;
+	    car = new Car();
+	    $('body').keydown(keydown);
+	    $('body').keyup(keyup);
+	    gameloop();
 	}
 
-    self.resize=function() {
+    var resize=function() {
         var scale = {x: 1, y: 1};
-        scale.x = (window.innerWidth) / this.plane.width;
-        scale.y = (window.innerHeight) / this.plane.height
-        console.log (window.innerHeight + '/' + this.plane.height);        
+        scale.x = (window.innerWidth) / plane.width;
+        scale.y = (window.innerHeight) / plane.height
+        console.log (window.innerHeight + '/' + plane.height);        
 		if (scale.x < scale.y)
 		{
             scale = scale.x + ', ' + scale.x;
@@ -40,75 +41,75 @@ function Game()
         {
             scale = scale.y + ', ' + scale.y;
             console.log('scale based on y is ' + scale);
-            console.log((this.plane.height * (window.innerHeight/this.plane.height)))
+            console.log((plane.height * (window.innerHeight/plane.height)));
         }
 
-        this.plane.setAttribute('style', 'border:1px; -ms-transform-origin: center top; -webkit-transform-origin: center top; -moz-transform-origin: center top; -o-transform-origin: center top; transform-origin: center top; -ms-transform: scale(' + scale + '); -webkit-transform: scale3d(' + scale + ', 1); -moz-transform: scale(' + scale + '); -o-transform: scale(' + scale + '); transform: scale(' + scale + ');');
+        plane.setAttribute('style', 'border:1px; -ms-transform-origin: center top; -webkit-transform-origin: center top; -moz-transform-origin: center top; -o-transform-origin: center top; transform-origin: center top; -ms-transform: scale(' + scale + '); -webkit-transform: scale3d(' + scale + ', 1); -moz-transform: scale(' + scale + '); -o-transform: scale(' + scale + '); transform: scale(' + scale + ');');
     }
 
-	self.keydown=function(event)
+	var keydown=function(event)
 	{
 		console.log('key ' + event.keyCode);
 		switch(event.keyCode)
 		{
 			case 37: //left
-				self.car.turnLeft();
+				car.turnLeft();
 				break
 			case 39: //right
-				self.car.turnRight();
+				car.turnRight();
 				break;
 			case 38: //up
-				self.car.accelerate();
+				car.accelerate();
 				break;
 			case 40: //down
-				self.car.decelerate();
+				car.decelerate();
 				break;
 		}
 	}
 
-	self.keyup=function(event)
+	var keyup=function(event)
 	{
 		console.log("keyup " + event.keyCode);
 		switch(event.keyCode)
 		{
 			case 37: //left
 			case 39: //right
-				self.car.stopTurn();
+				car.stopTurn();
 				break;
 			case 38: //up
 			case 40: //down
-				self.car.stopAccelerate();
+				car.stopAccelerate();
 				break;
 		}
 	}
 
-	self.gameloop=function()
+	var gameloop=function()
 	{
-		self.clear();
-		self.update();
-		self.draw();
-		setTimeout(self.gameloop, 40);
+		clear();
+		update();
+		draw();
+		setTimeout(gameloop, 40);
 	}
 
-	self.clear = function()
+	var clear = function()
 	{
-		self.context.clearRect(0, 0, self.plane.width, self.plane.height);
-		self.context.drawImage(self.track, 0, 0);
+		context.clearRect(0, 0, plane.width, plane.height);
+		context.drawImage(track, 0, 0);
 	}
 
-	self.draw=function()
+	var draw=function()
 	{
-		console.log('track dimensions: ', self.track.width, self.track.height)
-		console.log('canvas dimensions: ', self.plane.width, self.plane.height)
-		// console.log('context dimensions: ', self.context.width, self.context.height)
-		self.car.draw(self.context);
+		console.log('track dimensions: ', track.width, track.height)
+		console.log('canvas dimensions: ', plane.width, plane.height)
+		// console.log('context dimensions: ', context.width, context.height)
+		car.draw(context);
 	}
 
-	self.update=function()
+	var update=function()
 	{
-		self.car.update();
-		// var offset = Math.round(self.car.position.x) * 4 + Math.round(self.car.position.y) * 4 * self.track.width;
-		// console.log('seeking ' + offset + ' from ' + self.trackData.length);
-        // console.log("pixel is " + self.trackData[offset]+','+self.trackData[offset + 1]+','+self.trackData[offset + 2]+','+self.trackData[offset + 3]);
+		car.update();
+		// var offset = Math.round(car.x) * 4 + Math.round(car.y) * 4 * track.width;
+		// console.log('seeking ' + offset + ' from ' + trackData.length);
+        // console.log("pixel is " + trackData[offset]+','+trackData[offset + 1]+','+trackData[offset + 2]+','+trackData[offset + 3]);
 	}
 }
