@@ -21,7 +21,6 @@ function Game()
 
  		self.trackData=self.context.getImageData(0, 0, self.track.width, self.track.height).data;
 	    self.car = new Car();
-	    self.car.start();
 	    $('body').keydown(self.keydown);
 	    $('body').keyup(self.keyup);
 	    self.gameloop();
@@ -108,8 +107,8 @@ function Game()
 	self.update=function()
 	{
 		self.car.update();
-		var offset = Math.round(self.car.position.x) * 4 + Math.round(self.car.position.y) * 4 * self.track.width;
-		console.log('seeking ' + offset + ' from ' + self.trackData.length);
-        console.log("pixel is " + self.trackData[offset]+','+self.trackData[offset + 1]+','+self.trackData[offset + 2]+','+self.trackData[offset + 3]);
+		// var offset = Math.round(self.car.position.x) * 4 + Math.round(self.car.position.y) * 4 * self.track.width;
+		// console.log('seeking ' + offset + ' from ' + self.trackData.length);
+        // console.log("pixel is " + self.trackData[offset]+','+self.trackData[offset + 1]+','+self.trackData[offset + 2]+','+self.trackData[offset + 3]);
 	}
 }

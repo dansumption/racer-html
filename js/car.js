@@ -1,52 +1,48 @@
 function Car ()
 {
-    var self=this;
-
-    self.start = function()
-    {
-        self.position=new Vector(600, 300);
-        self.angle=0;
-        self.speed=20;
-        self.steering = 0;
-        self.acceleration = 0;
-        console.log('New car at ', self.position.x, self.position.y)
-    }
+    var self=this,
+        position=new Vector(600, 300),
+        angle=0,
+        speed=20,
+        steering = 0,
+        acceleration = 0;
+    console.log('New car at ', position.x, position.y)
 
     self.accelerate = function ()
     {
-        self.acceleration = 1;
+        acceleration = 1;
     } 
 
     self.decelerate = function () 
     {
-        self.acceleration = -0.5;
+        acceleration = -0.5;
     }
 
     self.stopAccelerate = function()
     {
-        self.acceleration = 0;
+        acceleration = 0;
     }
 
     self.turnLeft = function()
     {
-        self.steering = -1;
+        steering = -1;
     }
 
     self.turnRight = function()
     {
-        self.steering = 1;
+        steering = 1;
     }
 
     self.stopTurn = function()
     {
-        self.steering = 0;
+        steering = 0;
     }
 
     self.draw = function(context)
     {
         context.save();
-        context.translate(self.position.x, self.position.y);
-        context.rotate(self.angle);
+        context.translate(position.x, position.y);
+        context.rotate(angle);
 
         // draw car
         context.strokeStyle='#999999';
@@ -58,33 +54,32 @@ function Car ()
         // draw wheels
         context.beginPath();
         context.translate(-10, -7);
-        self.drawWheel(context);
+        drawWheel(context);
         context.translate(0, 14);
-        self.drawWheel(context);
-        context.rotate(self.steering * 0.2);
+        drawWheel(context);
+        context.rotate(steering * 0.2);
         context.translate(20, 0);
-        self.drawWheel(context);
-        context.rotate(-self.steering * 0.2);
+        drawWheel(context);
+        context.rotate(-steering * 0.2);
         context.translate(0, -14);
-        context.rotate(self.steering * 0.2);
-        self.drawWheel(context);
+        context.rotate(steering * 0.2);
+        drawWheel(context);
         context.stroke();
         context.restore();
     }
 
-    self.drawWheel=function(context)
+    var drawWheel=function(context)
     {
         context.rect(-4, -2, 8, 4);
     }
 
     self.update = function ()
     {
-        // console.log("update: ", self.acceleration, self.angle, self.steering);
-        self.speed += self.acceleration;
-        self.angle += self.steering * 0.01 * self.speed;
-        self.position.x += self.speed * Math.cos(self.angle);
-        self.position.y += self.speed * Math.sin(self.angle);
-        self.speed *= 0.96;
+        speed += acceleration;
+        angle += steering * 0.01 * speed;
+        position.x += speed * Math.cos(angle);
+        position.y += speed * Math.sin(angle);
+        speed *= 0.96;
     }
 }
 
