@@ -77,8 +77,8 @@ function Car ()
     {
         speed += acceleration;
         angle += steering * 0.01 * speed;
-        position.x += speed * Math.cos(angle);
-        position.y += speed * Math.sin(angle);
+        self.x += speed * Math.cos(angle);
+        self.y += speed * Math.sin(angle);
         speed *= 0.96;
     }
 
@@ -90,6 +90,14 @@ function Car ()
     self.__defineGetter__("y", function()
     {
         return position.y;
+    });
+
+    self.__defineSetter__("x", function(val){
+        position.x = val;
+    });
+
+    self.__defineSetter__("y", function(val){
+        position.y = val;
     });
 }
 
