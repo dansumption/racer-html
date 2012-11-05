@@ -1,8 +1,6 @@
 function Game()
 {
 	var self=this,
-    	plane = $("#plane").get(0),
-    	context=plane.getContext('2d'),
 		track = new Image(),
 		trackData,
 		car;
@@ -102,7 +100,7 @@ function Game()
 		console.log('track dimensions: ', track.width, track.height)
 		console.log('canvas dimensions: ', plane.width, plane.height)
 		// console.log('context dimensions: ', context.width, context.height)
-		car.draw(context);
+		car.draw();
 	}
 
 	var update=function()

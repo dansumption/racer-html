@@ -38,7 +38,7 @@ function Car ()
         steering = 0;
     }
 
-    self.draw = function(context)
+    self.draw = function()
     {
         context.save();
         context.translate(position.x, position.y);
@@ -54,21 +54,21 @@ function Car ()
         // draw wheels
         context.beginPath();
         context.translate(-10, -7);
-        drawWheel(context);
+        drawWheel();
         context.translate(0, 14);
-        drawWheel(context);
+        drawWheel();
         context.rotate(steering * 0.2);
         context.translate(20, 0);
-        drawWheel(context);
+        drawWheel();
         context.rotate(-steering * 0.2);
         context.translate(0, -14);
         context.rotate(steering * 0.2);
-        drawWheel(context);
+        drawWheel();
         context.stroke();
         context.restore();
     }
 
-    var drawWheel=function(context)
+    var drawWheel=function()
     {
         context.rect(-4, -2, 8, 4);
     }
