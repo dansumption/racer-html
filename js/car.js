@@ -44,8 +44,6 @@ function Car ()
 
     self.draw = function(context)
     {
-        // offset = self.position.x * 4 + self.position.y * 4 * imageData.width;
-        // console.log("pixel is " + data[offset]+','+data[offset + 1]+','+data[offset + 2]+','+data[offset + 3]);
         context.save();
         context.translate(self.position.x, self.position.y);
         context.rotate(self.angle);
