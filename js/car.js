@@ -6,7 +6,7 @@ function Car ()
         speed=20,
         steering = 0,
         acceleration = 0;
-    console.log('New car at ', position.x, position.y)
+    console.log('New car at ', self.x, self.y)
 
     self.accelerate = function ()
     {
@@ -41,7 +41,7 @@ function Car ()
     self.draw = function()
     {
         context.save();
-        context.translate(position.x, position.y);
+        context.translate(self.x, self.y);
         context.rotate(angle);
 
         // draw car
@@ -81,6 +81,16 @@ function Car ()
         position.y += speed * Math.sin(angle);
         speed *= 0.96;
     }
+
+    self.__defineGetter__("x", function()
+    {
+        return position.x;
+    });
+
+    self.__defineGetter__("y", function()
+    {
+        return position.y;
+    });
 }
 
 function Vector(x, y)
